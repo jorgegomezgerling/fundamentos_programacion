@@ -24,9 +24,9 @@ procedure cerrar(var archivo: t_archivo);
 procedure leer_registro(var archivo: t_archivo; pos: integer; var registro: t_institucion);
 procedure guardar_informacion(var archivo: t_archivo; posicion: integer; var registro: t_institucion);
 procedure listar1(var archivo: t_archivo);
-procedure mostrar_registro(registro: t_institucion); // Agregué el punto y coma faltante al final
+procedure mostrar_registro(registro: t_institucion); 
 procedure cargar_registro(var archivo: t_archivo; var registro: t_institucion; posicion: integer);
-procedure listar2 (var archivo: t_archivo; pos: integer); // Corregí el nombre del parámetro
+procedure listar2 (var archivo: t_archivo; pos: integer); 
 procedure orden_burbuja(var archivo: t_archivo);
 procedure bbinaria(var archivo: t_archivo; buscado: t_programa; var posicion: longint); // Cambié el tipo de buscado
 procedure borrar_registro(var archivo: t_archivo; pos_borrar: longint);
@@ -34,6 +34,6 @@ procedure mostrar_institucion_por_programa(var archivo: t_archivo; buscado: t_pr
 
 implementation
 
-// Aquí van las implementaciones de los procedimientos y funciones definidos arriba
+// Aquí van las implementaciones de los procedimientos y funciones definidos 
 
 end.
