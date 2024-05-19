@@ -28,9 +28,9 @@ procedure mostrar_registro(registro: t_institucion);
 procedure cargar_registro(var archivo: t_archivo; var registro: t_institucion; posicion: integer);
 procedure listar2 (var archivo: t_archivo; pos: integer); 
 procedure orden_burbuja(var archivo: t_archivo);
-procedure bbinaria(var archivo: t_archivo; buscado: t_programa; var posicion: longint); // Cambié el tipo de buscado
+procedure bbinaria(var archivo: t_archivo; buscado: t_programa; var posicion: longint); // Ver la cuestión de buscado
 procedure borrar_registro(var archivo: t_archivo; pos_borrar: longint);
-procedure mostrar_institucion_por_programa(var archivo: t_archivo; buscado: t_programa); // Agregué el punto y coma faltante al final
+procedure mostrar_institucion_por_programa(var archivo: t_archivo; buscado: t_programa); 
 
 implementation
 
