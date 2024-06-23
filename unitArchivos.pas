@@ -11,29 +11,21 @@ type
 	t_programa = (CLP, RAN, PROVINCIA, REFRIGERIO, PRIMERA_INFANCIA, ESPACIOS_DE_CUIDADO, CLUBES, COMUNITARIOS);
 	
 	t_institucion = record
-		nombre_institucion, directivo_a_cargo: string[60];
+		nombre_institucion, directivo_cargo: string[60];
 		ubicacion: t_coordenadas;
 		programa: t_programa;
-		activo: boolean;
+		activo: char;
 	end;
 	
 	t_archivo = file of t_institucion;
 	
-const MI_ARCHIVO = '.\Archivo_Comedores.DAT';
+const MI_ARCHIVO = './Archivo_Comedores.DAT';
 
-procedure crear(var archivo: t_archivo); //DONE
-procedure abrir(var archivo: t_archivo); //DONE
-procedure cerrar(var archivo: t_archivo); //DONE
-procedure leer_registro(var archivo: t_archivo; pos: integer; var registro: t_institucion);
-//procedure guardar_informacion(var archivo: t_archivo; posicion: integer; var registro: t_institucion);
-//procedure listar1(var archivo: t_archivo);
-//procedure mostrar_registro(registro: t_institucion); 
-//procedure cargar_registro(var archivo: t_archivo; var registro: t_institucion; posicion: integer);
-//procedure listar2 (var archivo: t_archivo; pos: integer); 
-//procedure orden_burbuja(var archivo: t_archivo);
-//procedure bbinaria(var archivo: t_archivo; buscado: t_programa; var posicion: longint); // Ver la cuestión de buscado
-//procedure borrar_registro(var archivo: t_archivo; pos_borrar: longint);
-//procedure mostrar_institucion_por_programa(var archivo: t_archivo; buscado: t_programa); 
+procedure crear(var archivo: t_archivo); 
+procedure abrir(var archivo: t_archivo); 
+procedure cerrar(var archivo: t_archivo); 
+procedure crear_registro(var archivo: t_archivo; institucion: t_institucion);
+procedure mostrar_registro(var archivo: t_archivo; pos: integer);
 
 implementation
 
@@ -54,51 +46,29 @@ begin
 	close(archivo);
 end;
 
-procedure leer_registro(var archivo: t_archivo; pos: integer; var registro: t_institucion);
+procedure crear_registro(var archivo: t_archivo; institucion: t_institucion);
 begin
+	assign(archivo, MI_ARCHIVO);
+	reset(archivo);
+	seek(archivo, filesize(archivo));
+	write(archivo, institucion);
+	close(archivo);
+end;
+
+procedure mostrar_registro(var archivo: t_archivo; pos: integer);
+var institucion: t_institucion;
+
+begin
+	assign(archivo, MI_ARCHIVO);
+	reset(archivo);
 	seek(archivo, pos);
-	read(archivo, registro);
+	read(archivo, institucion);
+    writeln('Institución: ', institucion.nombre_institucion);
+    writeln('Directivo a cargo: ', institucion.directivo_cargo);
+    writeln('Ingrese ubicación en latitud espacio longitud: ', institucion.ubicacion.latitud, institucion.ubicacion.longitud);
+    writeln('Programa que ofrece: ', institucion.programa);
+    writeln('¿Se encuentra activo?: ', institucion.activo);
 end;
 
-procedure guardar_registro(var archivo: t_archivo; pos: integer; registro: t_institucion);
 begin
-	seek(archivo, pos);
-	write(archivo, registro);
-end;
-
-
-procedure cargar_registro(var archivo: t_archivo; pos: integer; registro: t_institucion);
-var id_comedor: integer;
-begin
-	with registro do
-		begin
-			id_comedor := pos;
-			
-			writeln('Ingrese el nombre del comedor: ');
-			readln(nombre_institucion);
-			writeln('Ingrese el nombre del Directivo a cargo: ');
-			readln(directivo_a_cargo);
-			writeln('Ingrese las coordenadas de la Institución: ');
-			//readln(ubicacion); // ESTO TENGO QUE ARREGLAR, UNA CUESTION DE LATITUD Y LONGITUD. NO CREO QUE SEA DIFICIL.
-			writeln('Ingrese el Programa que otorga: ');
-			readln(programa);
-			//writeln('Ingrese si se está activo actualmente: ');
-			//readln(activo);			
-		end;
-end;
-
-procedure orden_burbuja(var archivo: t_archivo);
-var r1, r2: t_institucion;
-	lim, i, j: integer;
-	
-begin
-	lim := filesize(archivo) -1;
-	for i := 1 to lim do
-	
-	for j := 0 to lim -i do
-		begin
-			seek(archivo, j);
-			read(archivo, r1);
-		end;
-end;
 end.
