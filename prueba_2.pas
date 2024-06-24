@@ -29,37 +29,45 @@ uses unitArchivos;
 var archivo: t_archivo;
 	institucion: t_institucion;
 	pos: integer;
+	tecla: char;
 
 begin
+tecla := 'S';
 
 	crear(archivo);
-
-with institucion do
-begin
-    writeln('Ingrese el nombre de la institución: ');
-    readln(nombre_institucion);
-    
-    writeln('Ingrese el nombre del directivo a cargo: ');
-    readln(directivo_cargo);
-    
-    writeln('Ingrese la latitud: ');
-    readln(ubicacion.latitud);
-    
-    writeln('Ingrese la longitud: ');
-    readln(ubicacion.longitud);
-    
-    writeln('Ingrese el programa (CLP, RAN, PROVINCIA, REFRIGERIO, PRIMERA_INFANCIA, ESPACIOS_DE_CUIDADO, CLUBES, COMUNITARIOS): ');
-    readln(programa);
-    
-    writeln('¿Está activo? (S/N): ');
-    readln(activo);
-end;
-
-	
-	crear_registro(archivo, institucion);
+	while tecla <> 'N' do
+	with institucion do
+	begin
+		writeln('Ingrese el nombre de la institución: ');
+		readln(nombre_institucion);
+		
+		writeln('Ingrese el nombre del directivo a cargo: ');
+		readln(directivo_cargo);
+		
+		writeln('Ingrese la latitud: ');
+		readln(ubicacion.latitud);
+		
+		writeln('Ingrese la longitud: ');
+		readln(ubicacion.longitud);
+		
+		writeln('Ingrese el programa (CLP, RAN, PROVINCIA, REFRIGERIO, PRIMERA_INFANCIA, ESPACIOS_DE_CUIDADO, CLUBES, COMUNITARIOS): ');
+		readln(programa);
+		
+		writeln('¿Está activo? (S/N): ');
+		readln(activo);
+		
+		crear_registro(archivo, institucion);
+		writeln('Desea seguir cargando ? S/N: ');
+		readln(tecla);
+	end;
 	
     // Mostrar el registro en la posición 0
-    pos := 0;
+    abrir(archivo);
+    writeln('Qué registro Institución desea modificar?');
+    readln(pos);
+    mostrar_registro(archivo, pos);
+    
+    modificar_registro(archivo, pos);
     mostrar_registro(archivo, pos);
 
 end.
