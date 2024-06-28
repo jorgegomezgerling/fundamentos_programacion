@@ -11,6 +11,7 @@ type
 	t_programa = (CLP, RAN, PROVINCIA, REFRIGERIO, PRIMERA_INFANCIA, ESPACIOS_DE_CUIDADO, CLUBES, COMUNITARIOS);
 	
 	t_institucion = record
+		numero_institucion: integer;
 		nombre_institucion, directivo_cargo: string[60];
 		ubicacion: t_coordenadas;
 		programa: t_programa;
@@ -24,9 +25,12 @@ const MI_ARCHIVO = './Archivo_Comedores.DAT';
 procedure crear(var archivo: t_archivo); 
 procedure abrir(var archivo: t_archivo); 
 procedure cerrar(var archivo: t_archivo); 
+procedure mostrar_archivo(var archivo: t_archivo);
 procedure crear_registro(var archivo: t_archivo; institucion: t_institucion);
 procedure mostrar_registro(var archivo: t_archivo; pos: integer);
+procedure mostrar_registro_acotado(var archivo: t_archivo; pos: integer);
 procedure modificar_registro(var archivo: t_archivo; pos: integer);
+
 
 implementation
 
@@ -64,6 +68,7 @@ begin
 	reset(archivo);
 	seek(archivo, pos);
 	read(archivo, institucion);
+	writeln('Numero Institucion: ', institucion.numero_institucion);
     writeln('Institución: ', institucion.nombre_institucion);
     writeln('Directivo a cargo: ', institucion.directivo_cargo);
     writeln('Ingrese ubicación en latitud espacio longitud: ', institucion.ubicacion.latitud, institucion.ubicacion.longitud);
@@ -71,12 +76,47 @@ begin
     writeln('¿Se encuentra activo?: ', institucion.activo);
 end;
 
+
+procedure mostrar_archivo(var archivo: t_archivo);
+var
+    i: integer;
+begin
+    assign(archivo, MI_ARCHIVO);
+    reset(archivo);
+    writeln('Instituciones: ');
+    for i := 0 to filesize(archivo) - 1 do
+    begin
+        mostrar_registro_acotado(archivo, i);
+    end;
+    close(archivo);
+end;
+
+
+
+procedure mostrar_registro_acotado(var archivo: t_archivo; pos: integer);
+var institucion: t_institucion;
+
+begin
+	seek(archivo, pos);
+	read(archivo, institucion);
+	writeln('Posición: ', pos, ' ---- ', institucion.numero_institucion, ' ', institucion.nombre_institucion, ' ----');
+end;
+
+
 procedure modificar_nombre(var institucion: t_institucion);
 var nuevo_nombre: string;
 begin
     writeln('Nuevo nombre de la Institución: ');
     readln(nuevo_nombre);
     institucion.nombre_institucion := nuevo_nombre;
+end;
+
+procedure modificar_numero(var institucion: t_institucion);
+var nuevo_numero: integer;
+begin
+    writeln('Nuevo número de la Institución: ');
+    readln(nuevo_numero);
+    institucion.numero_institucion := nuevo_numero;
 end;
 
 procedure modificar_directivo(var institucion: t_institucion);
@@ -101,7 +141,15 @@ end;
 procedure modificar_programa(var institucion: t_institucion);
 var nuevo_programa: integer;
 begin
-    writeln('Nuevo programa (0: CLP, 1: RAN, 2: PROVINCIA, 3: REFRIGERIO, 4: PRIMERA_INFANCIA, 5: ESPACIOS_DE_CUIDADO, 6: CLUBES, 7: COMUNITARIOS): ');
+    writeln('Nuevo programa:');
+    writeln('0: CLP');
+    writeln('1: RAN');
+    writeln('2: PROVINCIA');
+    writeln('3: REFRIGERIO');
+    writeln('4: PRIMERA_INFANCIA');
+    writeln('5: ESPACIOS_DE_CUIDADO');
+    writeln('6: CLUBES');
+    writeln('7: COMUNITARIOS');
     readln(nuevo_programa);
     case nuevo_programa of
         0: institucion.programa := CLP;
@@ -133,7 +181,13 @@ begin
 	reset(archivo);
 	seek(archivo, pos);
 	read(archivo, institucion);
-	writeln('Campo a modificar (0: Nombre Institución, 1: Nombre Encargado, 2: Programa, 3: Ubicación 4: Programa 5: Estado: ');
+	writeln('Campo a modificar:');
+	writeln('0: Nombre Institución');
+	writeln('1: Nombre Encargado');
+	writeln('2: Programa');
+	writeln('3: Ubicación');
+	writeln('4: Programa');
+	writeln('5: Estado');
     readln(campo);
     case campo of
         0: modificar_nombre(institucion);
@@ -148,12 +202,6 @@ begin
 	write(archivo, institucion);
 	close(archivo);
 end;
-
-
-
-
-
-
 
 begin
 end.

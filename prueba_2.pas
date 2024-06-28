@@ -32,12 +32,18 @@ var archivo: t_archivo;
 	tecla: char;
 
 begin
+
+mostrar_archivo(archivo);
+
 tecla := 'S';
 
 	crear(archivo);
 	while tecla <> 'N' do
 	with institucion do
 	begin
+		writeln('Ingrese el numero de la institución: ');
+		readln(numero_institucion);
+		
 		writeln('Ingrese el nombre de la institución: ');
 		readln(nombre_institucion);
 		
@@ -63,7 +69,8 @@ tecla := 'S';
 	
     // Mostrar el registro en la posición 0
     abrir(archivo);
-    writeln('Qué registro Institución desea modificar?');
+    writeln('Qué Institución desea modificar?');
+    mostrar_archivo(archivo);
     readln(pos);
     mostrar_registro(archivo, pos);
     
