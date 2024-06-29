@@ -29,12 +29,14 @@ var archivo: t_archivo;
     institucion: t_institucion;
     pos: integer;
     tecla: char;
+    eleccion: integer;
 
 begin
+	
     // Crear el archivo si no existe y mostrar su contenido
-    abrir(archivo);
-    mostrar_archivo(archivo);
-    cerrar(archivo);
+    //abrir(archivo);
+    //mostrar_archivo(archivo);
+    //cerrar(archivo);
 
     // Crear y agregar registros
     abrir(archivo);
@@ -76,12 +78,14 @@ begin
    
     // Mostrar y modificar registros
     abrir(archivo);
-    writeln('Qué Institución desea modificar?');
     mostrar_archivo(archivo);
-    readln(pos);
-    mostrar_registro(archivo, pos);
+    //writeln('Qué Institución desea modificar?');
+    //readln(pos);
+    //mostrar_registro(archivo, pos);
     
-    modificar_registro(archivo, pos);
-    mostrar_registro(archivo, pos);
+    //modificar_registro(archivo, pos);
+    //mostrar_registro(archivo, pos);
+    ordenamiento_burbuja(archivo);
+    mostrar_archivo(archivo);
     cerrar(archivo);
     end.

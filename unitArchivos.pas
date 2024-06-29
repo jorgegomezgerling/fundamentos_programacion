@@ -30,7 +30,7 @@ procedure crear_registro(var archivo: t_archivo; institucion: t_institucion);
 procedure mostrar_registro(var archivo: t_archivo; pos: integer);
 procedure mostrar_registro_acotado(var archivo: t_archivo; pos: integer);
 procedure modificar_registro(var archivo: t_archivo; pos: integer);
-
+procedure ordenamiento_burbuja(var archivo: t_archivo);
 
 implementation
 
@@ -45,13 +45,13 @@ procedure abrir(var archivo: t_archivo);
 begin
 	assign(archivo, MI_ARCHIVO);
 	reset(archivo);
-	writeln('Archivo abierto.');
+	writeln('Archivo abierto exitosamente.');
 end;
 
 procedure cerrar(var archivo: t_archivo);
 begin
 	close(archivo);
-	writeln('Archivo cerrado.');
+	writeln('Archivo cerrado exitosamente.');
 end;
 
 procedure crear_registro(var archivo: t_archivo; institucion: t_institucion);
@@ -194,6 +194,47 @@ begin
 	seek(archivo, pos);
 	write(archivo, institucion);
 end;
+
+procedure ordenamiento_burbuja(var archivo: t_archivo);
+	var i, j: integer;
+		institucion_i, institucion_j: t_institucion;
+	
+		procedure intercambiar(var a, b: t_institucion);
+		var aux: t_institucion;
+		begin	
+			aux := a;
+			a := b;
+			b := aux;
+		end;
+		
+		procedure leer_institucion(var archivo: t_archivo; var institucion: t_institucion; posicion: integer);
+		begin
+			seek(archivo, posicion);
+			read(archivo, institucion);
+		end;
+		
+		procedure escribir_institucion(var archivo: t_archivo; var institucion: t_institucion; posicion: integer);
+		begin
+			seek(archivo, posicion);
+			write(archivo, institucion);
+		end;
+		
+		begin
+		for i := 0 to filesize(archivo) -2 do
+			begin
+				for j := i + 1 to filesize(archivo) -1 do
+					begin
+					leer_institucion(archivo, institucion_i, i);
+					leer_institucion(archivo, institucion_j, j);
+					if institucion_i.numero_institucion > institucion_j.numero_institucion then
+						begin
+							intercambiar(institucion_i, institucion_j);
+							escribir_institucion(archivo, institucion_i, i);
+							escribir_institucion(archivo, institucion_j, j);
+						end;
+					end;
+				end;
+			end;
 
 begin
 end.
