@@ -87,5 +87,5 @@ begin
     //mostrar_registro(archivo, pos);
     ordenamiento_burbuja(archivo);
     mostrar_archivo(archivo);
-    cerrar(archivo);
+    cerrar(archivo); // Pruebo cuestion de SSH 
     end.
