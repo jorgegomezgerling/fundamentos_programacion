@@ -21,53 +21,60 @@
    
 }
 
-
 program PruebaArchivo;
 
 uses unitArchivos;
 
 var archivo: t_archivo;
-	institucion: t_institucion;
-	pos: integer;
-	tecla: char;
+    institucion: t_institucion;
+    pos: integer;
+    tecla: char;
 
 begin
+    // Crear el archivo si no existe y mostrar su contenido
+    abrir(archivo);
+    mostrar_archivo(archivo);
+    cerrar(archivo);
 
-mostrar_archivo(archivo);
+    // Crear y agregar registros
+    abrir(archivo);
+    tecla := 'S';
+    {while tecla <> 'N' do
+    begin
+    with institucion do
+    begin
+        writeln('Ingrese el numero de la institución: ');
+        readln(numero_institucion);
+        
+        writeln('Ingrese el nombre de la institución: ');
+        readln(nombre_institucion);
+        
+        writeln('Ingrese el nombre del directivo a cargo: ');
+        readln(directivo_cargo);
+        
+        writeln('Ingrese la latitud: ');
+        readln(ubicacion.latitud);
+        
+        writeln('Ingrese la longitud: ');
+        readln(ubicacion.longitud);
+        
+        writeln('Ingrese el programa (0: CLP, 1: RAN, 2: PROVINCIA, 3: REFRIGERIO, 4: PRIMERA_INFANCIA, 5: ESPACIOS_DE_CUIDADO, 6: CLUBES, 7: COMUNITARIOS): ');
+        readln(programa);
+        
+        writeln('¿Está activo? (S/N): ');
+        readln(activo);
+    
+		writeln('Creando registro...');
 
-tecla := 'S';
-
-	crear(archivo);
-	while tecla <> 'N' do
-	with institucion do
-	begin
-		writeln('Ingrese el numero de la institución: ');
-		readln(numero_institucion);
-		
-		writeln('Ingrese el nombre de la institución: ');
-		readln(nombre_institucion);
-		
-		writeln('Ingrese el nombre del directivo a cargo: ');
-		readln(directivo_cargo);
-		
-		writeln('Ingrese la latitud: ');
-		readln(ubicacion.latitud);
-		
-		writeln('Ingrese la longitud: ');
-		readln(ubicacion.longitud);
-		
-		writeln('Ingrese el programa (CLP, RAN, PROVINCIA, REFRIGERIO, PRIMERA_INFANCIA, ESPACIOS_DE_CUIDADO, CLUBES, COMUNITARIOS): ');
-		readln(programa);
-		
-		writeln('¿Está activo? (S/N): ');
-		readln(activo);
-		
-		crear_registro(archivo, institucion);
 		writeln('Desea seguir cargando ? S/N: ');
 		readln(tecla);
-	end;
-	
-    // Mostrar el registro en la posición 0
+		
+		if tecla = 'N' then
+			cerrar(archivo);
+	  end;
+    end;}
+   
+    // Mostrar y modificar registros
     abrir(archivo);
     writeln('Qué Institución desea modificar?');
     mostrar_archivo(archivo);
@@ -76,5 +83,5 @@ tecla := 'S';
     
     modificar_registro(archivo, pos);
     mostrar_registro(archivo, pos);
-
-end.
+    cerrar(archivo);
+    end.

@@ -38,23 +38,24 @@ procedure crear(var archivo: t_archivo);
 begin
 	assign(archivo, MI_ARCHIVO);
 	rewrite(archivo);
+	writeln('Archivo creado.');
 end;
 
 procedure abrir(var archivo: t_archivo);
 begin
 	assign(archivo, MI_ARCHIVO);
 	reset(archivo);
+	writeln('Archivo abierto.');
 end;
 
 procedure cerrar(var archivo: t_archivo);
 begin
 	close(archivo);
+	writeln('Archivo cerrado.');
 end;
 
 procedure crear_registro(var archivo: t_archivo; institucion: t_institucion);
 begin
-	assign(archivo, MI_ARCHIVO);
-	reset(archivo);
 	seek(archivo, filesize(archivo));
 	write(archivo, institucion);
 	close(archivo);
@@ -64,8 +65,6 @@ procedure mostrar_registro(var archivo: t_archivo; pos: integer);
 var institucion: t_institucion;
 
 begin
-	assign(archivo, MI_ARCHIVO);
-	reset(archivo);
 	seek(archivo, pos);
 	read(archivo, institucion);
 	writeln('Numero Institucion: ', institucion.numero_institucion);
@@ -76,22 +75,16 @@ begin
     writeln('¿Se encuentra activo?: ', institucion.activo);
 end;
 
-
 procedure mostrar_archivo(var archivo: t_archivo);
 var
     i: integer;
 begin
-    assign(archivo, MI_ARCHIVO);
-    reset(archivo);
     writeln('Instituciones: ');
     for i := 0 to filesize(archivo) - 1 do
     begin
         mostrar_registro_acotado(archivo, i);
     end;
-    close(archivo);
 end;
-
-
 
 procedure mostrar_registro_acotado(var archivo: t_archivo; pos: integer);
 var institucion: t_institucion;
@@ -151,6 +144,7 @@ begin
     writeln('6: CLUBES');
     writeln('7: COMUNITARIOS');
     readln(nuevo_programa);
+    
     case nuevo_programa of
         0: institucion.programa := CLP;
         1: institucion.programa := RAN;
@@ -186,8 +180,7 @@ begin
 	writeln('1: Nombre Encargado');
 	writeln('2: Programa');
 	writeln('3: Ubicación');
-	writeln('4: Programa');
-	writeln('5: Estado');
+	writeln('4: Estado');
     readln(campo);
     case campo of
         0: modificar_nombre(institucion);
@@ -200,7 +193,6 @@ begin
     end;
 	seek(archivo, pos);
 	write(archivo, institucion);
-	close(archivo);
 end;
 
 begin
