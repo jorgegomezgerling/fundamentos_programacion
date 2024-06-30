@@ -28,8 +28,9 @@ uses unitArchivos;
 var archivo: t_archivo;
     institucion: t_institucion;
     pos: integer;
-    tecla: char;
+    tecla, palabra: char;
     eleccion: integer;
+ 
 
 begin
 	
@@ -79,13 +80,14 @@ begin
     // Mostrar y modificar registros
     abrir(archivo);
     mostrar_archivo(archivo);
-    //writeln('Qué Institución desea modificar?');
-    //readln(pos);
-    //mostrar_registro(archivo, pos);
+   // writeln('Qué Institución desea modificar?');
+   // readln(pos);
+   // mostrar_registro(archivo, pos);
     
-    //modificar_registro(archivo, pos);
-    //mostrar_registro(archivo, pos);
-    ordenamiento_burbuja(archivo);
+   // modificar_registro(archivo, pos);
+   // mostrar_registro(archivo, pos);
+    palabra := 'S';
+    ordenamiento_burbuja(archivo, palabra);
     mostrar_archivo(archivo);
     cerrar(archivo); // Pruebo cuestion de SSH 
     end. // Segunda prueba

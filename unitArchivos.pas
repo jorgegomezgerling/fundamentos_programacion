@@ -30,9 +30,28 @@ procedure crear_registro(var archivo: t_archivo; institucion: t_institucion);
 procedure mostrar_registro(var archivo: t_archivo; pos: integer);
 procedure mostrar_registro_acotado(var archivo: t_archivo; pos: integer);
 procedure modificar_registro(var archivo: t_archivo; pos: integer);
-procedure ordenamiento_burbuja(var archivo: t_archivo);
+procedure ordenamiento_burbuja(var archivo: t_archivo; var ascendente: char);
+procedure eliminar_registro(var archivo: t_archivo; pos: integer);
+
+
+procedure leer_institucion(var archivo: t_archivo; var institucion: t_institucion; posicion: integer);
+procedure escribir_institucion(var archivo: t_archivo; var institucion: t_institucion; posicion: integer);
+
 
 implementation
+
+
+procedure leer_institucion(var archivo: t_archivo; var institucion: t_institucion; posicion: integer);
+begin
+	seek(archivo, posicion);
+	read(archivo, institucion);
+end;
+		
+procedure escribir_institucion(var archivo: t_archivo; var institucion: t_institucion; posicion: integer);
+begin
+	seek(archivo, posicion);
+	write(archivo, institucion);
+end;
 
 procedure crear(var archivo: t_archivo);
 begin
@@ -57,8 +76,7 @@ end;
 procedure crear_registro(var archivo: t_archivo; institucion: t_institucion);
 begin
 	seek(archivo, filesize(archivo));
-	write(archivo, institucion);
-	close(archivo);
+	write(archivo, institucion); 
 end;
 
 procedure mostrar_registro(var archivo: t_archivo; pos: integer);
@@ -70,7 +88,7 @@ begin
 	writeln('Numero Institucion: ', institucion.numero_institucion);
     writeln('Institución: ', institucion.nombre_institucion);
     writeln('Directivo a cargo: ', institucion.directivo_cargo);
-    writeln('Ingrese ubicación en latitud espacio longitud: ', institucion.ubicacion.latitud, institucion.ubicacion.longitud);
+    writeln('Ubicación en coordenadas: ', institucion.ubicacion.latitud:0:6, ', ', institucion.ubicacion.longitud:0:6);
     writeln('Programa que ofrece: ', institucion.programa);
     writeln('¿Se encuentra activo?: ', institucion.activo);
 end;
@@ -80,6 +98,7 @@ var
     i: integer;
 begin
     writeln('Instituciones: ');
+    writeln();
     for i := 0 to filesize(archivo) - 1 do
     begin
         mostrar_registro_acotado(archivo, i);
@@ -171,7 +190,7 @@ procedure modificar_registro(var archivo: t_archivo; pos: integer);
 var institucion: t_institucion;
 	campo: integer;
 begin
-	assign(archivo, MI_ARCHIVO);
+	assign(archivo, MI_ARCHIVO); // Repensar si son necesarias el assign y reset acá;
 	reset(archivo);
 	seek(archivo, pos);
 	read(archivo, institucion);
@@ -195,7 +214,7 @@ begin
 	write(archivo, institucion);
 end;
 
-procedure ordenamiento_burbuja(var archivo: t_archivo);
+procedure ordenamiento_burbuja(var archivo: t_archivo; var ascendente: char);
 	var i, j: integer;
 		institucion_i, institucion_j: t_institucion;
 	
@@ -207,18 +226,6 @@ procedure ordenamiento_burbuja(var archivo: t_archivo);
 			b := aux;
 		end;
 		
-		procedure leer_institucion(var archivo: t_archivo; var institucion: t_institucion; posicion: integer);
-		begin
-			seek(archivo, posicion);
-			read(archivo, institucion);
-		end;
-		
-		procedure escribir_institucion(var archivo: t_archivo; var institucion: t_institucion; posicion: integer);
-		begin
-			seek(archivo, posicion);
-			write(archivo, institucion);
-		end;
-		
 		begin
 		for i := 0 to filesize(archivo) -2 do
 			begin
@@ -226,15 +233,62 @@ procedure ordenamiento_burbuja(var archivo: t_archivo);
 					begin
 					leer_institucion(archivo, institucion_i, i);
 					leer_institucion(archivo, institucion_j, j);
-					if institucion_i.numero_institucion > institucion_j.numero_institucion then
+					if ascendente = 'S' then
 						begin
-							intercambiar(institucion_i, institucion_j);
-							escribir_institucion(archivo, institucion_i, i);
-							escribir_institucion(archivo, institucion_j, j);
+							if institucion_i.numero_institucion > institucion_j.numero_institucion then
+								begin
+									intercambiar(institucion_i, institucion_j);
+									escribir_institucion(archivo, institucion_i, i);
+									escribir_institucion(archivo, institucion_j, j);
+								end;
+						end
+					else if ascendente = 'N' then
+						begin
+							if institucion_i.numero_institucion < institucion_j.numero_institucion then
+								begin
+									intercambiar(institucion_i, institucion_j);
+									escribir_institucion(archivo, institucion_i, i);
+									escribir_institucion(archivo, institucion_j, j);
+								end;
 						end;
 					end;
 				end;
 			end;
 
+procedure eliminar_registro(var archivo: t_archivo; pos: integer);
+	var institucion: t_institucion;
+		archivo_aux: t_archivo;
+		i, j: integer;
+	
+	procedure crear_archivo_auxiliar(var arch: t_archivo);
+		const ARCHIVO_AUX = './Archivo_Comedores_AUX.DAT';
+		begin
+			assign(arch, ARCHIVO_AUX);
+			rewrite(arch);
+			writeln('Archivo auxiliar creado exitosamente.');
+		end;
+		
+	begin
+		crear_archivo_auxiliar(archivo_aux);
+		j := 0;
+		
+			for i := 0 to filesize(archivo) -1 do
+				begin
+					if i <> pos then
+						begin
+						leer_institucion(archivo, institucion, i);
+						escribir_institucion(archivo_aux, institucion, j);
+						inc(j);
+						end;
+				end;
+			close(archivo_aux);
+			close(archivo);
+			
+			// Reemplazar archivo original con el archivo auxiliar
+			assign(archivo, './Archivo_Comedores.DAT');
+			erase(archivo);
+			rename(archivo_aux, './Archivo_Comedores.DAT');
+			writeln('Registro eliminado exitosamente.');
+	end;
 begin
 end.

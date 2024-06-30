@@ -28,11 +28,15 @@ uses crt, unitArchivos;
 
 var archivo: t_archivo;
     eleccion: integer;
-    segunda_eleccion: integer;
-
-BEGIN
+    //segunda_eleccion: integer;
+    tecla: char;
+    institucion: t_institucion;
 
 begin
+    // Crear el archivo si no existe y mostrar su contenido
+    abrir(archivo);
+    mostrar_archivo(archivo);
+    cerrar(archivo);
 	abrir(archivo);
 	writeln();
 	writeln('--------------- MENU ---------------');
@@ -46,21 +50,55 @@ begin
 	writeln();
     readln(eleccion);
     case eleccion of
-		0: begin
-			clrscr;
+		0: begin // Listo simplemente todas las Instituciones, podría mejorarse y listar por programas. Pero de momento esto me sirve. No es necesario ordenarlo porque ordeno cada vez que inserto.
+			//clrscr;
 			mostrar_archivo(archivo);
 			end;
-		1: begin
+		2: begin // La idea acá es agregar la institución y mostrarla ya ordenada. Quizás
 			clrscr;
-			writeln('¿Desea listar todas las instituciones o realizar búsqueda por nombre?');
-			writeln('0: Busqueda por nombre: ');
-			writeln('1: Listar todas: ');
-			
+			tecla := 'S';
+			while tecla <> 'N' do
+				begin
+					with institucion do
+					begin
+						writeln('Ingrese el numero de la institución: ');
+						readln(numero_institucion);
+						
+						writeln('Ingrese el nombre de la institución: ');
+						readln(nombre_institucion);
+						
+						writeln('Ingrese el nombre del directivo a cargo: ');
+						readln(directivo_cargo);
+						
+						writeln('Ingrese la latitud: ');
+						readln(ubicacion.latitud);
+						writeln('Ingrese la longitud: ');
+						readln(ubicacion.longitud);
+						
+						writeln('Ingrese el programa (0: CLP, 1: RAN, 2: PROVINCIA, 3: REFRIGERIO, 4: PRIMERA_INFANCIA, 5: ESPACIOS_DE_CUIDADO, 6: CLUBES, 7: COMUNITARIOS): ');
+						readln(programa);
+						
+						writeln('¿Está activo? (S/N): ');
+						readln(activo);
+					  end;
+					  
+					writeln('Creando registro...');
+					crear_registro(archivo, institucion);
+					writeln('Desea seguir cargando ? S/N: ');
+					readln(tecla);
+					if tecla = 'N' then
+						cerrar(archivo);
+				end;
 			end;
+			5: begin
+				mostrar_archivo(archivo);
+				writeln('¿Qué institución desea eliminar?');
+				readln(eleccion);
+				eliminar_registro(archivo, eleccion);
+				end;
 		else
 		writeln('Eleccción inválida.');
 	end; 
-end;
 
 END.
 
