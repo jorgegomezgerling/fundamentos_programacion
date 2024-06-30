@@ -1,7 +1,7 @@
 unit unitArchivos;
 
 interface
-uses crt;
+uses crt, SysUtils;
 
 type
 	t_coordenadas = record
@@ -90,7 +90,7 @@ begin
     writeln('Directivo a cargo: ', institucion.directivo_cargo);
     writeln('Ubicación en coordenadas: ', institucion.ubicacion.latitud:0:6, ', ', institucion.ubicacion.longitud:0:6);
     writeln('Programa que ofrece: ', institucion.programa);
-    writeln('¿Se encuentra activo?: ', institucion.activo);
+    writeln('Activo: ', institucion.activo);
 end;
 
 procedure mostrar_archivo(var archivo: t_archivo);
@@ -233,7 +233,7 @@ procedure ordenamiento_burbuja(var archivo: t_archivo; var ascendente: char);
 					begin
 					leer_institucion(archivo, institucion_i, i);
 					leer_institucion(archivo, institucion_j, j);
-					if ascendente = 'S' then
+					if UpCase(ascendente) = 'A' then
 						begin
 							if institucion_i.numero_institucion > institucion_j.numero_institucion then
 								begin
@@ -242,7 +242,7 @@ procedure ordenamiento_burbuja(var archivo: t_archivo; var ascendente: char);
 									escribir_institucion(archivo, institucion_j, j);
 								end;
 						end
-					else if ascendente = 'N' then
+					else if UpCase(ascendente) = 'D' then
 						begin
 							if institucion_i.numero_institucion < institucion_j.numero_institucion then
 								begin

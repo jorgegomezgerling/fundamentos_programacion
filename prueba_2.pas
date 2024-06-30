@@ -86,7 +86,7 @@ begin
     
    // modificar_registro(archivo, pos);
    // mostrar_registro(archivo, pos);
-    palabra := 'S';
+    palabra := 'N';
     ordenamiento_burbuja(archivo, palabra);
     mostrar_archivo(archivo);
     cerrar(archivo); // Pruebo cuestion de SSH 

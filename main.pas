@@ -24,81 +24,125 @@
 
 program main;
 
-uses crt, unitArchivos;
+uses crt, unitArchivos, SysUtils;
 
 var archivo: t_archivo;
-    eleccion: integer;
-    //segunda_eleccion: integer;
+    eleccion, pos: integer;
+    segunda_eleccion, tercera_eleccion, cuarta_eleccion: char;
     tecla: char;
     institucion: t_institucion;
-
+	ascendente: char;
 begin
+	ascendente := 'A';
     // Crear el archivo si no existe y mostrar su contenido
-    abrir(archivo);
-    mostrar_archivo(archivo);
-    cerrar(archivo);
-	abrir(archivo);
-	writeln();
-	writeln('--------------- MENU ---------------');
-	writeln();
-	writeln('0: Listar Instituciones');
-	writeln('1: Modificar Institución');
-	writeln('2: Agregar Institución');
-	writeln('3: Ordenar Instituciones');
-	writeln('4: Buscar Institución');
-	writeln('5: Eliminar Institución');
-	writeln();
-    readln(eleccion);
-    case eleccion of
-		0: begin // Listo simplemente todas las Instituciones, podría mejorarse y listar por programas. Pero de momento esto me sirve. No es necesario ordenarlo porque ordeno cada vez que inserto.
-			//clrscr;
-			mostrar_archivo(archivo);
-			end;
-		2: begin // La idea acá es agregar la institución y mostrarla ya ordenada. Quizás
-			clrscr;
-			tecla := 'S';
-			while tecla <> 'N' do
-				begin
-					with institucion do
+    repeat
+		clrscr;
+		abrir(archivo);
+		writeln();
+		writeln('--------------- MENU ---------------');
+		writeln();
+		writeln('0: Listar Instituciones');
+		writeln('1: Modificar Institución');
+		writeln('2: Agregar Institución');
+		writeln('3: Ordenar Instituciones');
+		writeln('4: Buscar Institución');
+		writeln('5: Eliminar Institución');
+		writeln('6: Salir.');
+		writeln();
+		readln(eleccion);
+		case eleccion of
+			0: begin // Listo simplemente todas las Instituciones, podría mejorarse y listar por programas. Pero de momento esto me sirve. No es necesario ordenarlo porque ordeno cada vez que inserto.
+				clrscr;
+				ordenamiento_burbuja(archivo, ascendente);
+				cuarta_eleccion := 'S';
+				
+				while UpCase(cuarta_eleccion) = 'S' do
 					begin
-						writeln('Ingrese el numero de la institución: ');
-						readln(numero_institucion);
-						
-						writeln('Ingrese el nombre de la institución: ');
-						readln(nombre_institucion);
-						
-						writeln('Ingrese el nombre del directivo a cargo: ');
-						readln(directivo_cargo);
-						
-						writeln('Ingrese la latitud: ');
-						readln(ubicacion.latitud);
-						writeln('Ingrese la longitud: ');
-						readln(ubicacion.longitud);
-						
-						writeln('Ingrese el programa (0: CLP, 1: RAN, 2: PROVINCIA, 3: REFRIGERIO, 4: PRIMERA_INFANCIA, 5: ESPACIOS_DE_CUIDADO, 6: CLUBES, 7: COMUNITARIOS): ');
-						readln(programa);
-						
-						writeln('¿Está activo? (S/N): ');
-						readln(activo);
-					  end;
-					  
-					writeln('Creando registro...');
-					crear_registro(archivo, institucion);
-					writeln('Desea seguir cargando ? S/N: ');
-					readln(tecla);
-					if tecla = 'N' then
-						cerrar(archivo);
+						mostrar_archivo(archivo);
+						writeln();
+						writeln('¿Qué Institucion desea saber en detalle?: ');
+						readln(pos);
+						clrscr; // Este es muy optativo; Si se quiere mantener la información en la pantalla o no.
+						mostrar_registro(archivo, pos);
+						writeln('Presione cualquier tecla para continuar...');
+						readkey;
+						clrscr;
+						writeln('¿Desea seguir obteniendo información adicional de otras Instituciones: S/N?');
+						readln(cuarta_eleccion);
+						clrscr;
+					end;
 				end;
-			end;
-			5: begin
-				mostrar_archivo(archivo);
-				writeln('¿Qué institución desea eliminar?');
-				readln(eleccion);
-				eliminar_registro(archivo, eleccion);
+			2: begin // La idea acá es agregar la institución y mostrarla ya ordenada. Quizás
+				clrscr;
+				tecla := 'S';
+				while UpCase(tecla) <> 'N' do
+					begin
+						with institucion do
+						begin
+							writeln('Ingrese el numero de la institución: ');
+							readln(numero_institucion);
+							
+							writeln('Ingrese el nombre de la institución: ');
+							readln(nombre_institucion);
+							
+							writeln('Ingrese el nombre del directivo a cargo: ');
+							readln(directivo_cargo);
+							
+							writeln('Ingrese la latitud: ');
+							readln(ubicacion.latitud);
+							writeln('Ingrese la longitud: ');
+							readln(ubicacion.longitud);
+							
+							writeln('Ingrese el programa (0: CLP, 1: RAN, 2: PROVINCIA, 3: REFRIGERIO, 4: PRIMERA_INFANCIA, 5: ESPACIOS_DE_CUIDADO, 6: CLUBES, 7: COMUNITARIOS): ');
+							readln(programa);
+							
+							writeln('¿Está activo? (S/N): ');
+							readln(activo);
+						  end;
+						  
+						writeln('Creando registro...');
+						crear_registro(archivo, institucion);
+						writeln('Desea seguir cargando ? S/N: ');
+						readln(tecla);
+						if UpCase(tecla) = 'N' then
+							cerrar(archivo);
+					end;
 				end;
-		else
-		writeln('Eleccción inválida.');
-	end; 
-
+				3: begin
+						clrscr;
+						writeln('Presione "A" para ordenar en forma ascendente "D" para hacerlo en forma descendente.');
+						readln(segunda_eleccion);
+						ordenamiento_burbuja(archivo, segunda_eleccion);
+						mostrar_archivo(archivo);
+						writeln();
+						writeln('Presione cualquier tecla para continuar...');
+						readkey;
+						clrscr;
+					end;
+				5: begin
+					tercera_eleccion := 'S';
+					while tercera_eleccion = 'S' do
+						begin
+							clrscr;
+							mostrar_archivo(archivo);
+							writeln();
+							writeln('¿Qué institución desea eliminar?');
+							readln(eleccion);
+							eliminar_registro(archivo, eleccion);
+							
+							writeln('¿Desea seguir eliminando? S/N');
+							abrir(archivo);
+							readln(tercera_eleccion);
+						end;
+					
+					end;
+				6: begin
+						writeln('Saliendo del programa...');
+					end;
+			else
+			writeln('Eleccción inválida.');
+		end; 
+		//cerrar(archivo);
+	until eleccion = 6;
 END.
 
