@@ -27,7 +27,7 @@ program main;
 uses crt, unitArchivos, SysUtils;
 
 var archivo: t_archivo;
-    eleccion, pos: integer;
+    eleccion, pos, partida: integer;
     segunda_eleccion, tercera_eleccion, cuarta_eleccion: char;
     tecla: char;
     institucion: t_institucion;
@@ -64,6 +64,7 @@ begin
 						readln(pos);
 						clrscr; // Este es muy optativo; Si se quiere mantener la información en la pantalla o no.
 						mostrar_registro(archivo, pos);
+						writeln();
 						writeln('Presione cualquier tecla para continuar...');
 						readkey;
 						clrscr;
@@ -79,31 +80,56 @@ begin
 					begin
 						with institucion do
 						begin
-							writeln('Ingrese el numero de la institución: ');
+							write('Ingrese el numero de la institución: ');
 							readln(numero_institucion);
 							
-							writeln('Ingrese el nombre de la institución: ');
+							write('Ingrese el nombre de la institución: ');
 							readln(nombre_institucion);
 							
-							writeln('Ingrese el nombre del directivo a cargo: ');
+							write('Ingrese el nombre del directivo a cargo: ');
 							readln(directivo_cargo);
 							
-							writeln('Ingrese la latitud: ');
+							write('Ingrese la latitud: ');
 							readln(ubicacion.latitud);
-							writeln('Ingrese la longitud: ');
+							write('Ingrese la longitud: ');
 							readln(ubicacion.longitud);
 							
-							writeln('Ingrese el programa (0: CLP, 1: RAN, 2: PROVINCIA, 3: REFRIGERIO, 4: PRIMERA_INFANCIA, 5: ESPACIOS_DE_CUIDADO, 6: CLUBES, 7: COMUNITARIOS): ');
-							readln(programa);
+							writeln('Programa:');
+							writeln();
+							writeln('0: CLP');
+							writeln('1: RAN');
+							writeln('2: PROVINCIA');
+							writeln('3: REFRIGERIO');
+							writeln('4: PRIMERA INFANCIA');
+							writeln('5: ESPACIOS DE CUIDADO');
+							writeln('6: CLUBES');
+							writeln('7: COMUNITARIOS');
 							
-							writeln('¿Está activo? (S/N): ');
+							readln(partida);
+						
+						case partida of
+							0: institucion.programa := CLP;
+							1: institucion.programa := RAN;
+							2: institucion.programa := PROVINCIA;
+							3: institucion.programa := REFRIGERIO;
+							4: institucion.programa := PRIMERA_INFANCIA;
+							5: institucion.programa := ESPACIOS_DE_CUIDADO;
+							6: institucion.programa := CLUBES;
+							7: institucion.programa := COMUNITARIOS;
+						else
+							writeln('Programa inválido.');
+						end;
+																			
+							write('¿Está activo? (S/N): ');
 							readln(activo);
 						  end;
 						  
 						writeln('Creando registro...');
+						writeln();
 						crear_registro(archivo, institucion);
 						writeln('Desea seguir cargando ? S/N: ');
 						readln(tecla);
+						clrscr;
 						if UpCase(tecla) = 'N' then
 							cerrar(archivo);
 					end;
@@ -121,7 +147,7 @@ begin
 					end;
 				5: begin
 					tercera_eleccion := 'S';
-					while tercera_eleccion = 'S' do
+					while UpCase(tercera_eleccion) = 'S' do
 						begin
 							clrscr;
 							mostrar_archivo(archivo);
