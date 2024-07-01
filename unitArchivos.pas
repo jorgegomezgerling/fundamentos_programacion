@@ -55,14 +55,14 @@ procedure crear(var archivo: t_archivo);
 begin
 	assign(archivo, MI_ARCHIVO);
 	rewrite(archivo);
-	writeln('Archivo creado.');
+	//writeln('Archivo creado.');
 end;
 
 procedure abrir(var archivo: t_archivo);
 begin
 	assign(archivo, MI_ARCHIVO);
 	reset(archivo);
-	writeln('Archivo abierto exitosamente.');
+	//writeln('Archivo abierto exitosamente.'); Tanto la de abrir como cerrar sirvieron para debuggeo, pero ahora ya no.
 end;
 
 procedure cerrar(var archivo: t_archivo);
@@ -313,7 +313,7 @@ procedure eliminar_registro(var archivo: t_archivo; pos: integer);
 			rewrite(arch);
 			writeln();
 			textcolor(LightGreen);
-			writeln('Archivo auxiliar creado exitosamente.');
+		//	writeln('Archivo auxiliar creado exitosamente.'); // Un writeln interesante, pero unicamente para debuggear
 		end;
 		
 	begin

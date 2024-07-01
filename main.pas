@@ -134,6 +134,7 @@ textbackground(Black);
 							readln(opcion);
 							while UpCase(opcion) = 'M' do
 								begin
+									clrscr;
 									mostrar_registro(archivo, pos);
 									modificar_registro(archivo, pos);
 									clrscr;
@@ -223,10 +224,14 @@ textbackground(Black);
 						  end;
 						 
 						writeln();
+						textcolor(Yellow);
 						writeln('Creando registro...');
 						writeln();
+						delay(1000);
+						writeln('Registro creado exitosamente.');
 						crear_registro(archivo, institucion);
 						textcolor(White);
+						writeln();
 						write('Desea seguir cargando ? S/N: ');
 						readln(tecla);
 						clrscr;
@@ -279,11 +284,14 @@ textbackground(Black);
 							clrscr;
 							mostrar_archivo(archivo);
 							writeln();
-							writeln('¿Qué institución desea eliminar?');
+							textcolor(White);
+							write('¿Qué institución desea eliminar?: ');
+							textcolor(LightGreen);
 							readln(eleccion);
 							eliminar_registro(archivo, eleccion);
-							
-							writeln('¿Desea seguir eliminando? S/N');
+							textcolor(White);
+							writeln();
+							write('¿Desea seguir eliminando? S/N: ');
 							abrir(archivo);
 							readln(tercera_eleccion);
 						end;
