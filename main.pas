@@ -29,7 +29,7 @@ uses crt, unitArchivos, SysUtils;
 var archivo: t_archivo;
     eleccion, pos, partida: integer;
     segunda_eleccion, tercera_eleccion, cuarta_eleccion: char;
-    tecla: char;
+    tecla, opcion: char;
     institucion: t_institucion;
 	ascendente: char;
 begin
@@ -74,6 +74,7 @@ textbackground(Black);
     textColor(White);
 
     write('¿Qué desea hacer?: ');
+		textcolor(LightGreen);
 		readln(eleccion);
 		case eleccion of
 			0: begin // Listo simplemente todas las Instituciones, podría mejorarse y listar por programas. Pero de momento esto me sirve. No es necesario ordenarlo porque ordeno cada vez que inserto.
@@ -85,9 +86,9 @@ textbackground(Black);
 					begin
 						mostrar_archivo(archivo);
 						writeln();
-						textcolor(LightGreen);
-						write('Para mas detalles, seleccione el índice de la Institución requerida: ');
 						textcolor(White);
+						write('Seleccione el índice de la Institución requerida: ');
+						textcolor(LightGreen);
 						readln(pos);
 						clrscr; // Este es muy optativo; Si se quiere mantener la información en la pantalla o no.
 						mostrar_registro(archivo, pos);
@@ -95,25 +96,63 @@ textbackground(Black);
 						textcolor(White);
 			//			writeln('Presione cualquier tecla para continuar...');
 				//		readkey;
-						writeln('¿Desea seguir obteniendo información adicional de otras Instituciones: S/N?');
+						textcolor(LightGreen);
+						write('¿Obtener información adicional de otras Instituciones S/N?: ');
+						textcolor(White);
 						readln(cuarta_eleccion);
 						clrscr;
 					end;
 				end;
 			1: begin
-					ordenamiento_burbuja(archivo, ascendente);
 					clrscr;
-					mostrar_archivo(archivo);
-					write('Qué Institución desea modificar?: ');
-					readln(pos);
-					mostrar_registro(archivo, pos);
-					writeln();
-					writeln('¿Qué campo desea modificar?');
-					modificar_registro(archivo, pos);
-					mostrar_registro(archivo, pos); // Esto comento porque no me esta dando la posibilidad de pasarlo.
-					writeln();
-					writeln('*************** Archivo modificado exitosamente ***************');
-					readkey;
+					opcion := 'S';
+					while UpCase(opcion) <> 'P' do
+						begin
+							ordenamiento_burbuja(archivo, ascendente);
+							clrscr;
+							mostrar_archivo(archivo);
+							writeln();
+							textcolor(White);
+							write('Qué Institución desea modificar?: ');
+							textcolor(LightGreen);
+							readln(pos);
+							clrscr; // Para que limpie ni bien selecciono.
+							mostrar_registro(archivo, pos);
+							modificar_registro(archivo, pos);
+							clrscr;
+							mostrar_registro(archivo, pos); // Esto comento porque no me esta dando la posibilidad de pasarlo.
+							writeln();
+							textcolor(Green);
+							textbackground(LightGray);
+							writeln('*************** Archivo modificado exitosamente ***************');
+							writeln();
+							textcolor(White);
+							textbackground(Black);
+							writeln('"M": Seguir modificando la misma Institución');
+							writeln('"O" Modificar otra institución');
+							writeln('"P" Volver al menú principal');
+							readln(opcion);
+							while UpCase(opcion) = 'M' do
+								begin
+									mostrar_registro(archivo, pos);
+									modificar_registro(archivo, pos);
+									clrscr;
+									mostrar_registro(archivo, pos); // Esto comento porque no me esta dando la posibilidad de pasarlo.
+									writeln();
+									textcolor(Green);
+									textbackground(LightGray);
+									writeln('*************** Archivo modificado exitosamente ***************');
+									writeln();
+									textcolor(White);
+									textbackground(Black);
+									writeln('"M": Seguir modificando la misma Institución');
+									writeln('"O" Modificar otra institución');
+									writeln('"P" Volver al menú principal');
+									readln(opcion);
+									clrscr;
+								end;
+						end;
+						
 				end;
 			2: begin // La idea acá es agregar la institución y mostrarla ya ordenada. Quizás
 				clrscr;
@@ -123,20 +162,32 @@ textbackground(Black);
 						with institucion do
 						begin
 							write('Ingrese el numero de la institución: ');
+							textcolor(LightGreen);
 							readln(numero_institucion);
 							
+							textcolor(White);
 							write('Ingrese el nombre de la institución: ');
+							textcolor(LightGreen);
 							readln(nombre_institucion);
 							
+							textcolor(White);							
 							write('Ingrese el nombre del directivo a cargo: ');
+							textcolor(LightGreen);
 							readln(directivo_cargo);
 							
+							textcolor(White);							
 							write('Ingrese la latitud: ');
+							textcolor(LightGreen);
 							readln(ubicacion.latitud);
-							write('Ingrese la longitud: ');
-							readln(ubicacion.longitud);
 							
-							writeln('Programa:');
+							textcolor(White);
+							write('Ingrese la longitud: ');
+							textcolor(LightGreen);
+							readln(ubicacion.longitud);
+							writeln();
+							
+							textcolor(White);
+							writeln('Programas actuales:');
 							writeln();
 							writeln('0: CLP');
 							writeln('1: RAN');
@@ -146,7 +197,9 @@ textbackground(Black);
 							writeln('5: ESPACIOS DE CUIDADO');
 							writeln('6: CLUBES');
 							writeln('7: COMUNITARIOS');
-							
+							writeln();
+							write('Ingrese el índice del programa correspondiente: ');
+							textcolor(LightGreen);
 							readln(partida);
 						
 						case partida of
@@ -159,17 +212,21 @@ textbackground(Black);
 							6: institucion.programa := CLUBES;
 							7: institucion.programa := COMUNITARIOS;
 						else
+							textcolor(LightRed);
 							writeln('Programa inválido.');
 						end;
-																			
-							write('¿Está activo? (S/N): ');
+							textcolor(White);
+							write('¿Se encuentra activo (S/N)?: ');
+							textcolor(LightGreen);
 							readln(activo);
 						  end;
-						  
+						 
+						writeln();
 						writeln('Creando registro...');
 						writeln();
 						crear_registro(archivo, institucion);
-						writeln('Desea seguir cargando ? S/N: ');
+						textcolor(White);
+						write('Desea seguir cargando ? S/N: ');
 						readln(tecla);
 						clrscr;
 						if UpCase(tecla) = 'N' then
@@ -206,6 +263,7 @@ textbackground(Black);
 					end;
 				6: begin
 						writeln();
+						textcolor(White);
 						writeln('Saliendo del programa...');
 					end;
 			else

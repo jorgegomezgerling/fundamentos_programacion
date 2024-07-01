@@ -87,7 +87,7 @@ begin
 	writeln('Institucion N°: ', institucion.numero_institucion, ' ', institucion.nombre_institucion);
 	writeln();
     //writeln('Institución: ', institucion.nombre_institucion);
-    textcolor(LightBlue);
+    textcolor(White);
     writeln('Directivo a cargo: ', institucion.directivo_cargo);
     writeln('Ubicación en coordenadas: ', institucion.ubicacion.latitud:0:6, ', ', institucion.ubicacion.longitud:0:6);
     writeln('Programa que ofrece: ', institucion.programa);
@@ -102,7 +102,11 @@ var
     i: integer;
 begin
 	textcolor(LightRed);
-    writeln('Instituciones: ');
+    writeln('*******************************');
+    textcolor(White);
+    writeln('*        Instituciones        *');
+	textcolor(LightRed);
+    writeln('*******************************');
     writeln();
     for i := 0 to filesize(archivo) - 1 do
     begin
@@ -119,25 +123,30 @@ begin
 	textcolor(White);
 	//writeln('* Índice: ', pos, ' |-|-|-| N° ', institucion.numero_institucion, ' ', institucion.nombre_institucion);
 	writeln('* Índice: |', pos, '| --- N° ', institucion.numero_institucion, ' ', institucion.nombre_institucion);
+	textcolor(LightCyan);
+	writeln('--------------------------------');
 end;
 
 procedure modificar_nombre(var institucion: t_institucion);
 
-var n: string;
+var nuevo_nombre_institucion: string;
 
 begin
-    writeln('Nuevo nombre de la Institución: ');
+	textcolor(White);
+    write('Nuevo nombre de la Institución: ');
     readln;
-    readln(n);
-    writeln('Ya pasó el readln y no se leyó');
-    institucion.nombre_institucion := n;
+    textcolor(LightGreen);
+    readln(nuevo_nombre_institucion);
+    institucion.nombre_institucion := nuevo_nombre_institucion;
 end;
 
 procedure modificar_numero(var institucion: t_institucion);
 var nuevo_numero: integer;
 begin
+	textcolor(White);
     write('Nuevo número de la Institución: ');
     readln;
+    textcolor(LightGreen);
     readln(nuevo_numero);
     institucion.numero_institucion := nuevo_numero;
 end;
@@ -145,8 +154,10 @@ end;
 procedure modificar_directivo(var institucion: t_institucion);
 var nuevo_directivo: string;
 begin
-    writeln('Nuevo Directivo a cargo: ');
+	textcolor(White);
+    write('Nuevo Directivo a cargo: ');
     readln;
+    textcolor(LightGreen);
     readln(nuevo_directivo);
     institucion.directivo_cargo := nuevo_directivo;
 end;
@@ -155,9 +166,13 @@ procedure modificar_ubicacion(var institucion: t_institucion);
 var nueva_latitud, nueva_longitud: real;
 begin
 	readln;
+	textcolor(White);
     write('Nueva latitud: ');
+    textcolor(LightGreen);
     readln(nueva_latitud);
+    textcolor(White);
     write('Nueva longitud: ');
+    textcolor(LightGreen);
     readln(nueva_longitud);
     institucion.ubicacion.latitud := nueva_latitud;
     institucion.ubicacion.longitud := nueva_longitud;
@@ -166,7 +181,7 @@ end;
 procedure modificar_programa(var institucion: t_institucion);
 var nuevo_programa: integer;
 begin
-    writeln('Nuevo programa:');
+	textcolor(White);
     writeln();
     writeln('0: CLP');
     writeln('1: RAN');
@@ -176,6 +191,10 @@ begin
     writeln('5: ESPACIOS_DE_CUIDADO');
     writeln('6: CLUBES');
     writeln('7: COMUNITARIOS');
+    writeln();
+    textcolor(Yellow);
+    write('Nuevo programa: ');
+    textcolor(LightGreen);
     readln(nuevo_programa);
     
     case nuevo_programa of
@@ -188,6 +207,7 @@ begin
         6: institucion.programa := CLUBES;
         7: institucion.programa := COMUNITARIOS;
     else
+		textcolor(LightRed);
         writeln('Programa inválido.');
     end;
 end;
@@ -195,8 +215,10 @@ end;
 procedure modificar_activo(var institucion: t_institucion);
 var nuevo_estado: char;
 begin
-    writeln('¿Activo? (S/N): ');
+	textcolor(White);
+    write('¿Activo? (S/N): ');
     readln;
+    textcolor(LightGreen);
     readln(nuevo_estado);
     institucion.activo := nuevo_estado;
 end;
@@ -205,8 +227,8 @@ procedure modificar_registro(var archivo: t_archivo; pos: integer);
 var institucion: t_institucion;
 	campo: integer;
 begin
-	assign(archivo, MI_ARCHIVO); // Repensar si son necesarias el assign y reset acá;
-	reset(archivo);
+	//assign(archivo, MI_ARCHIVO); // Repensar si son necesarias el assign y reset acá;
+	//reset(archivo);
 	seek(archivo, pos);
 	read(archivo, institucion);
 	writeln();
@@ -220,9 +242,9 @@ begin
 	writeln();
 	//textcolor(LightGreen);
 	//write('Campo: ');
-	write('Campito: ');
+	write('Ingrese el índice del campo a modificar: ');
 	writeln();
-	textcolor(White);
+	textcolor(LightGreen);
     read(campo);
     case campo of
 		0: modificar_numero(institucion);
@@ -289,6 +311,8 @@ procedure eliminar_registro(var archivo: t_archivo; pos: integer);
 		begin
 			assign(arch, ARCHIVO_AUX);
 			rewrite(arch);
+			writeln();
+			textcolor(LightGreen);
 			writeln('Archivo auxiliar creado exitosamente.');
 		end;
 		
@@ -312,6 +336,7 @@ procedure eliminar_registro(var archivo: t_archivo; pos: integer);
 			assign(archivo, './Archivo_Comedores.DAT');
 			erase(archivo);
 			rename(archivo_aux, './Archivo_Comedores.DAT');
+			textcolor(LightGreen);
 			writeln('Registro eliminado exitosamente.');
 	end;
 begin
