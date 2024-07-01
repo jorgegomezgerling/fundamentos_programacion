@@ -80,12 +80,11 @@ begin
     // Mostrar y modificar registros
     abrir(archivo);
     mostrar_archivo(archivo);
-   // writeln('Qué Institución desea modificar?');
-   // readln(pos);
-   // mostrar_registro(archivo, pos);
-    
-   // modificar_registro(archivo, pos);
-   // mostrar_registro(archivo, pos);
+	writeln('Qué Institución desea modificar?');
+	readln(pos);
+	mostrar_registro(archivo, pos);
+    modificar_registro(archivo, pos);
+	mostrar_registro(archivo, pos);
     palabra := 'N';
     ordenamiento_burbuja(archivo, palabra);
     mostrar_archivo(archivo);

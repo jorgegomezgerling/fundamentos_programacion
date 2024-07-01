@@ -32,8 +32,6 @@ procedure mostrar_registro_acotado(var archivo: t_archivo; pos: integer);
 procedure modificar_registro(var archivo: t_archivo; pos: integer);
 procedure ordenamiento_burbuja(var archivo: t_archivo; var ascendente: char);
 procedure eliminar_registro(var archivo: t_archivo; pos: integer);
-
-
 procedure leer_institucion(var archivo: t_archivo; var institucion: t_institucion; posicion: integer);
 procedure escribir_institucion(var archivo: t_archivo; var institucion: t_institucion; posicion: integer);
 
@@ -85,18 +83,25 @@ var institucion: t_institucion;
 begin
 	seek(archivo, pos);
 	read(archivo, institucion);
-	writeln('Numero Institucion: ', institucion.numero_institucion);
-    writeln('Institución: ', institucion.nombre_institucion);
+	textcolor(LightRed);
+	writeln('Institucion N°: ', institucion.numero_institucion, ' ', institucion.nombre_institucion);
+	writeln();
+    //writeln('Institución: ', institucion.nombre_institucion);
+    textcolor(LightBlue);
     writeln('Directivo a cargo: ', institucion.directivo_cargo);
     writeln('Ubicación en coordenadas: ', institucion.ubicacion.latitud:0:6, ', ', institucion.ubicacion.longitud:0:6);
     writeln('Programa que ofrece: ', institucion.programa);
-    writeln('Activo: ', institucion.activo);
+    if UpCase(institucion.activo) = 'S' then
+		writeln('Estado: Activo.')
+	else if UpCase(institucion.activo) = 'N' then
+		writeln('Estado: Inactivo');
 end;
 
 procedure mostrar_archivo(var archivo: t_archivo);
 var
     i: integer;
 begin
+	textcolor(LightRed);
     writeln('Instituciones: ');
     writeln();
     for i := 0 to filesize(archivo) - 1 do
@@ -111,40 +116,48 @@ var institucion: t_institucion;
 begin
 	seek(archivo, pos);
 	read(archivo, institucion);
-	writeln('Posición: ', pos, ' ---- ', institucion.numero_institucion, ' ', institucion.nombre_institucion, ' ----');
+	textcolor(White);
+	//writeln('* Índice: ', pos, ' |-|-|-| N° ', institucion.numero_institucion, ' ', institucion.nombre_institucion);
+	writeln('* Índice: |', pos, '| --- N° ', institucion.numero_institucion, ' ', institucion.nombre_institucion);
 end;
 
-
 procedure modificar_nombre(var institucion: t_institucion);
-var nuevo_nombre: string;
+
+var n: string;
+
 begin
     writeln('Nuevo nombre de la Institución: ');
-    readln(nuevo_nombre);
-    institucion.nombre_institucion := nuevo_nombre;
+    readln;
+    readln(n);
+    writeln('Ya pasó el readln y no se leyó');
+    institucion.nombre_institucion := n;
 end;
 
 procedure modificar_numero(var institucion: t_institucion);
 var nuevo_numero: integer;
 begin
-    writeln('Nuevo número de la Institución: ');
+    write('Nuevo número de la Institución: ');
+    readln;
     readln(nuevo_numero);
     institucion.numero_institucion := nuevo_numero;
 end;
 
 procedure modificar_directivo(var institucion: t_institucion);
-var nuevo_nombre: string;
+var nuevo_directivo: string;
 begin
     writeln('Nuevo Directivo a cargo: ');
-    readln(nuevo_nombre);
-    institucion.directivo_cargo := nuevo_nombre;
+    readln;
+    readln(nuevo_directivo);
+    institucion.directivo_cargo := nuevo_directivo;
 end;
 
 procedure modificar_ubicacion(var institucion: t_institucion);
 var nueva_latitud, nueva_longitud: real;
 begin
-    writeln('Nueva latitud: ');
+	readln;
+    write('Nueva latitud: ');
     readln(nueva_latitud);
-    writeln('Nueva longitud: ');
+    write('Nueva longitud: ');
     readln(nueva_longitud);
     institucion.ubicacion.latitud := nueva_latitud;
     institucion.ubicacion.longitud := nueva_longitud;
@@ -154,6 +167,7 @@ procedure modificar_programa(var institucion: t_institucion);
 var nuevo_programa: integer;
 begin
     writeln('Nuevo programa:');
+    writeln();
     writeln('0: CLP');
     writeln('1: RAN');
     writeln('2: PROVINCIA');
@@ -182,6 +196,7 @@ procedure modificar_activo(var institucion: t_institucion);
 var nuevo_estado: char;
 begin
     writeln('¿Activo? (S/N): ');
+    readln;
     readln(nuevo_estado);
     institucion.activo := nuevo_estado;
 end;
@@ -194,19 +209,28 @@ begin
 	reset(archivo);
 	seek(archivo, pos);
 	read(archivo, institucion);
-	writeln('Campo a modificar:');
-	writeln('0: Nombre Institución');
-	writeln('1: Nombre Encargado');
-	writeln('2: Programa');
-	writeln('3: Ubicación');
-	writeln('4: Estado');
-    readln(campo);
+	writeln();
+	textcolor(White);
+	writeln('0: Número Institución');
+	writeln('1: Nombre Institución');
+	writeln('2: Nombre Encargado');
+	writeln('3: Programa');
+	writeln('4: Ubicación');
+	writeln('5: Estado');
+	writeln();
+	//textcolor(LightGreen);
+	//write('Campo: ');
+	write('Campito: ');
+	writeln();
+	textcolor(White);
+    read(campo);
     case campo of
-        0: modificar_nombre(institucion);
-        1: modificar_directivo(institucion);
-        2: modificar_programa(institucion);
-        3: modificar_ubicacion(institucion);
-        4: modificar_activo(institucion);
+		0: modificar_numero(institucion);
+        1: modificar_nombre(institucion);
+        2: modificar_directivo(institucion);
+        3: modificar_programa(institucion);
+        4: modificar_ubicacion(institucion);
+        5: modificar_activo(institucion);
     else
     writeln('Campo inválido.');
     end;

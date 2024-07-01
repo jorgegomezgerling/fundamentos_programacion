@@ -39,16 +39,41 @@ begin
 		clrscr;
 		abrir(archivo);
 		writeln();
-		writeln('--------------- MENU ---------------');
-		writeln();
-		writeln('0: Listar Instituciones');
-		writeln('1: Modificar Institución');
-		writeln('2: Agregar Institución');
-		writeln('3: Ordenar Instituciones');
-		writeln('4: Buscar Institución');
-		writeln('5: Eliminar Institución');
-		writeln('6: Salir.');
-		writeln();
+	
+textbackground(Black);	
+    clrscr;
+    
+    // Encabezado del menú
+    textColor(Mono);
+    writeln('*******************************');
+    textcolor(Mono);
+    writeln('*            MENU             *');
+    textColor(Mono);
+    writeln('*******************************');
+    
+    // Opciones del menú
+    TextColor(LightGreen);
+    writeln('*  0: Listar Instituciones    *');
+    textColor(LightMagenta);
+    writeln('*  1: Modificar Institución   *');
+    textColor(Yellow);
+    writeln('*  2: Agregar Institución     *');
+    textColor(LightBlue);
+    writeln('*  3: Ordenar Instituciones   *');
+    textColor(LightRed);
+    writeln('*  4: Buscar Institución      *');
+    textColor(LightCyan);
+    writeln('*  5: Eliminar Institución    *');
+    textColor(White);
+    writeln('*  6: Salir                   *');
+    
+    
+    textColor(Mono);
+    writeln('*******************************');
+    writeln();
+    textColor(White);
+
+    write('¿Qué desea hacer?: ');
 		readln(eleccion);
 		case eleccion of
 			0: begin // Listo simplemente todas las Instituciones, podría mejorarse y listar por programas. Pero de momento esto me sirve. No es necesario ordenarlo porque ordeno cada vez que inserto.
@@ -60,18 +85,35 @@ begin
 					begin
 						mostrar_archivo(archivo);
 						writeln();
-						writeln('¿Qué Institucion desea saber en detalle?: ');
+						textcolor(LightGreen);
+						write('Para mas detalles, seleccione el índice de la Institución requerida: ');
+						textcolor(White);
 						readln(pos);
 						clrscr; // Este es muy optativo; Si se quiere mantener la información en la pantalla o no.
 						mostrar_registro(archivo, pos);
 						writeln();
-						writeln('Presione cualquier tecla para continuar...');
-						readkey;
-						clrscr;
+						textcolor(White);
+			//			writeln('Presione cualquier tecla para continuar...');
+				//		readkey;
 						writeln('¿Desea seguir obteniendo información adicional de otras Instituciones: S/N?');
 						readln(cuarta_eleccion);
 						clrscr;
 					end;
+				end;
+			1: begin
+					ordenamiento_burbuja(archivo, ascendente);
+					clrscr;
+					mostrar_archivo(archivo);
+					write('Qué Institución desea modificar?: ');
+					readln(pos);
+					mostrar_registro(archivo, pos);
+					writeln();
+					writeln('¿Qué campo desea modificar?');
+					modificar_registro(archivo, pos);
+					mostrar_registro(archivo, pos); // Esto comento porque no me esta dando la posibilidad de pasarlo.
+					writeln();
+					writeln('*************** Archivo modificado exitosamente ***************');
+					readkey;
 				end;
 			2: begin // La idea acá es agregar la institución y mostrarla ya ordenada. Quizás
 				clrscr;
@@ -163,6 +205,7 @@ begin
 					
 					end;
 				6: begin
+						writeln();
 						writeln('Saliendo del programa...');
 					end;
 			else
