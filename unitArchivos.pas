@@ -296,7 +296,7 @@ procedure ordenamiento_burbuja(var archivo: t_archivo; var ascendente: char);
 									escribir_institucion(archivo, institucion_i, i);
 									escribir_institucion(archivo, institucion_j, j);
 								end;
-						end;
+						end
 					end;
 				end;
 			end;

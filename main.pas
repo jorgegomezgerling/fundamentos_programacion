@@ -27,7 +27,7 @@ program main;
 uses crt, unitArchivos, SysUtils;
 
 var archivo: t_archivo;
-    eleccion, pos, partida: integer;
+    eleccion, pos, partida, contador: integer;
     segunda_eleccion, tercera_eleccion, cuarta_eleccion: char;
     tecla, opcion: char;
     institucion: t_institucion;
@@ -96,9 +96,9 @@ textbackground(Black);
 						textcolor(White);
 			//			writeln('Presione cualquier tecla para continuar...');
 				//		readkey;
-						textcolor(LightGreen);
-						write('¿Obtener información adicional de otras Instituciones S/N?: ');
 						textcolor(White);
+						write('¿Obtener información adicional de otras Instituciones S/N?: ');
+						textcolor(LightGreen);
 						readln(cuarta_eleccion);
 						clrscr;
 					end;
@@ -161,6 +161,7 @@ textbackground(Black);
 					begin
 						with institucion do
 						begin
+							textcolor(White);
 							write('Ingrese el numero de la institución: ');
 							textcolor(LightGreen);
 							readln(numero_institucion);
@@ -233,17 +234,44 @@ textbackground(Black);
 							cerrar(archivo);
 					end;
 				end;
-				3: begin
-						clrscr;
-						writeln('Presione "A" para ordenar en forma ascendente "D" para hacerlo en forma descendente.');
-						readln(segunda_eleccion);
-						ordenamiento_burbuja(archivo, segunda_eleccion);
-						mostrar_archivo(archivo);
-						writeln();
-						writeln('Presione cualquier tecla para continuar...');
-						readkey;
-						clrscr;
+			3: begin
+				  clrscr;
+				  contador := 0;
+				  textcolor(White);
+				  writeln('Presione "A" para ordenar en forma ascendente "D" para hacerlo en forma descendente.');
+				  textcolor(LightGreen);
+				  readln(segunda_eleccion);
+				  while (UpCase(segunda_eleccion) <> 'A') and (UpCase(segunda_eleccion) <> 'D') and (contador <> 3) do
+				  begin
+					textcolor(LightRed);
+					writeln('Por favor, ingrese una letra válida: ');
+					textcolor(LightGreen);
+					readln(segunda_eleccion);
+					contador := contador + 1;
+					//writeln(contador); // Esto lo tenía unicamente para debuggear.
+					if contador = 3 then
+					begin
+					  textcolor(LightRed);
+					  textbackground(LightGray);
+					  writeln(contador);
+					  writeln('Demasiados intentos...');
+					  writeln('Redireccionando al menú principal...');
+					  readkey;
 					end;
+				  end;
+
+				  if (contador < 3) and ((UpCase(segunda_eleccion) = 'A') or (UpCase(segunda_eleccion) = 'D')) then
+				  begin
+					ordenamiento_burbuja(archivo, segunda_eleccion);
+					mostrar_archivo(archivo);
+					writeln();
+					textcolor(White);
+					writeln('Presione cualquier tecla para continuar...');
+					readkey;
+					clrscr;
+				  end;
+				end;
+
 				5: begin
 					tercera_eleccion := 'S';
 					while UpCase(tercera_eleccion) = 'S' do
