@@ -26,6 +26,7 @@ procedure crear(var archivo: t_archivo);
 procedure abrir(var archivo: t_archivo); 
 procedure cerrar(var archivo: t_archivo); 
 procedure mostrar_archivo(var archivo: t_archivo);
+procedure mostrar_archivo_aux(var archivo_aux: t_archivo);
 procedure crear_registro(var archivo: t_archivo; institucion: t_institucion);
 procedure mostrar_registro(var archivo: t_archivo; pos: integer);
 procedure mostrar_registro_acotado(var archivo: t_archivo; pos: integer);
@@ -34,10 +35,10 @@ procedure ordenamiento_burbuja(var archivo: t_archivo; var ascendente: char);
 procedure eliminar_registro(var archivo: t_archivo; pos: integer);
 procedure leer_institucion(var archivo: t_archivo; var institucion: t_institucion; posicion: integer);
 procedure escribir_institucion(var archivo: t_archivo; var institucion: t_institucion; posicion: integer);
+procedure listar_por_programa(var archivo: t_archivo; programa: t_programa);
 
 
 implementation
-
 
 procedure leer_institucion(var archivo: t_archivo; var institucion: t_institucion; posicion: integer);
 begin
@@ -339,5 +340,80 @@ procedure eliminar_registro(var archivo: t_archivo; pos: integer);
 			textcolor(LightGreen);
 			writeln('Registro eliminado exitosamente.');
 	end;
+
+
+procedure listar_por_programa(var archivo: t_archivo; programa: t_programa);
+	var
+	  institucion: t_institucion;
+	  archivo_aux: t_archivo;
+	  i, j: integer;
+
+	  procedure crear_archivo_auxiliar(var arch: t_archivo);
+	  const
+		ARCHIVO_AUX = './Archivo_Programas_AUX.DAT';
+	  begin
+		assign(arch, ARCHIVO_AUX);
+		rewrite(arch);
+		writeln();
+		textcolor(LightGreen);
+		// writeln('Archivo auxiliar creado exitosamente.'); // Un writeln interesante, pero unicamente para debuggear
+	  end;
+
+	begin
+	  reset(archivo);  // Abre el archivo original para lectura
+	  crear_archivo_auxiliar(archivo_aux);
+	  j := 0;
+	  
+	  for i := 0 to filesize(archivo) - 1 do
+	  begin
+		leer_institucion(archivo, institucion, i);  // Lee cada registro del archivo original
+		if institucion.programa = programa then
+		begin
+		  escribir_institucion(archivo_aux, institucion, j);  // Escribe el registro en el archivo auxiliar si la condición se cumple
+		  inc(j);
+		end;
+	  end;
+
+	  close(archivo_aux);
+	  close(archivo);
+	  clrscr;
+	  textcolor(White);
+	//  writeln('***********************');
+	writeln();
+	  textcolor(Yellow);
+	  writeln('*                ', programa,'                 *');
+	  textcolor(White);
+	//  writeln('***********************');
+	writeln();
+	  mostrar_archivo_aux(archivo_aux);
+	  readln;
+	  erase(archivo_aux);
+	  textcolor(White);
+	  writeln('Presione cualquier tecla para continuar...');
+	  readkey;
+	end;
+
+	procedure mostrar_archivo_aux(var archivo_aux: t_archivo);
+	var
+	  i: integer;
+	begin
+	  textcolor(LightRed);
+	  writeln('*******************************');
+	  textcolor(White);
+	  writeln('*        Instituciones        *');
+	  textcolor(LightRed);
+	  writeln('*******************************');
+	  writeln();
+
+	  reset(archivo_aux);  // Abre el archivo auxiliar para lectura
+	  for i := 0 to filesize(archivo_aux) - 1 do
+	  begin
+		mostrar_registro_acotado(archivo_aux, i);  // Muestra cada registro del archivo auxiliar
+	  end;
+	  close(archivo_aux);
+	end;
+
+	
 begin
 end.
+

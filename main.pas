@@ -32,6 +32,7 @@ var archivo: t_archivo;
     tecla, opcion: char;
     institucion: t_institucion;
 	ascendente: char;
+	programa: integer;
 begin
 	ascendente := 'A';
     // Crear el archivo si no existe y mostrar su contenido
@@ -61,7 +62,7 @@ textbackground(Black);
     textColor(LightBlue);
     writeln('*  3: Ordenar Instituciones   *');
     textColor(LightRed);
-    writeln('*  4: Buscar Institución      *');
+    writeln('*  4: Listar por Programas    *');
     textColor(LightCyan);
     writeln('*  5: Eliminar Institución    *');
     textColor(White);
@@ -228,6 +229,7 @@ textbackground(Black);
 						writeln('Creando registro...');
 						writeln();
 						delay(1000);
+						textcolor(LightGreen);
 						writeln('Registro creado exitosamente.');
 						crear_registro(archivo, institucion);
 						textcolor(White);
@@ -276,6 +278,43 @@ textbackground(Black);
 					clrscr;
 				  end;
 				end;
+				
+				4: begin
+					ordenamiento_burbuja(archivo, ascendente);
+					clrscr;
+					
+					//writeln('Escriba el índice del programa a listar: ');
+					
+							textcolor(LightRed);
+							writeln('Programas actuales:');
+							writeln();
+							textcolor(White);
+							writeln('0: CLP');
+							writeln('1: RAN');
+							writeln('2: PROVINCIA');
+							writeln('3: REFRIGERIO');
+							writeln('4: PRIMERA INFANCIA');
+							writeln('5: ESPACIOS DE CUIDADO');
+							writeln('6: CLUBES');
+							writeln('7: COMUNITARIOS');
+							writeln();
+							textcolor(White);
+							write('Ingrese el índice del programa correspondiente: ');
+							textcolor(LightGreen);
+							readln(programa);
+							
+							case programa of
+								0: listar_por_programa(archivo, CLP);
+								1: listar_por_programa(archivo, RAN);
+								2: listar_por_programa(archivo, PROVINCIA);
+								3: listar_por_programa(archivo, REFRIGERIO);
+								4: listar_por_programa(archivo, PRIMERA_INFANCIA);
+								5: listar_por_programa(archivo, ESPACIOS_DE_CUIDADO);
+								6: listar_por_programa(archivo, CLUBES);
+								7: listar_por_programa(archivo, COMUNITARIOS);
+						
+							end;
+						end;
 
 				5: begin
 					tercera_eleccion := 'S';
