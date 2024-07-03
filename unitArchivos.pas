@@ -37,6 +37,8 @@ procedure leer_institucion(var archivo: t_archivo; var institucion: t_institucio
 procedure escribir_institucion(var archivo: t_archivo; var institucion: t_institucion; posicion: integer);
 procedure listar_por_programa(var archivo: t_archivo; programa: t_programa);
 
+procedure busqueda_binariaprnum(var archivo: t_archivo; var pos: integer; buscado: integer);
+
 
 implementation
 
@@ -45,6 +47,40 @@ begin
 	seek(archivo, posicion);
 	read(archivo, institucion);
 end;
+
+
+procedure busqueda_binariaprnum(var archivo: t_archivo; var pos: integer; buscado: integer);
+var
+  mi, ma, m: integer;
+  auxi: t_institucion;
+begin
+  pos := -1;
+  mi := 0;  // Inicializa mi con 0 para índices basados en 0
+  ma := filesize(archivo) - 1;  // ma es el último índice del archivo
+
+  while (mi <= ma) and (pos = -1) do
+	begin
+		m := (mi + ma) div 2;
+		leer_institucion(archivo, auxi, m);
+
+		if buscado = auxi.numero_institucion then
+			begin
+				pos := m;  // Devuelve una posición basada en 1
+			end
+		else if buscado < auxi.numero_institucion then
+			begin
+				ma := m - 1;
+			end
+		else
+			begin
+				mi := m + 1;
+			end;
+		end;
+end;
+
+
+
+
 		
 procedure escribir_institucion(var archivo: t_archivo; var institucion: t_institucion; posicion: integer);
 begin
@@ -261,7 +297,7 @@ begin
 	write(archivo, institucion);
 end;
 
-procedure ordenamiento_burbuja(var archivo: t_archivo; var ascendente: char);
+procedure ordenamiento_burbuja(var archivo: t_archivo; var ascendente: char); // ordenamiento burbuja;
 	var i, j: integer;
 		institucion_i, institucion_j: t_institucion;
 	
@@ -367,7 +403,6 @@ procedure listar_por_programa(var archivo: t_archivo; programa: t_programa);
 	  for i := 0 to filesize(archivo) - 1 do
 	  begin
 		leer_institucion(archivo, institucion, i);  // Lee cada registro del archivo original
-		if institucion.programa = programa then
 		begin
 		  escribir_institucion(archivo_aux, institucion, j);  // Escribe el registro en el archivo auxiliar si la condición se cumple
 		  inc(j);

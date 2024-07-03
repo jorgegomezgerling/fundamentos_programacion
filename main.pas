@@ -27,7 +27,7 @@ program main;
 uses crt, unitArchivos, SysUtils;
 
 var archivo: t_archivo;
-    eleccion, pos, partida, contador: integer;
+    eleccion, pos, partida, contador, numero: integer;
     segunda_eleccion, tercera_eleccion, cuarta_eleccion: char;
     tecla, opcion: char;
     institucion: t_institucion;
@@ -65,8 +65,10 @@ textbackground(Black);
     writeln('*  4: Listar por Programas    *');
     textColor(LightCyan);
     writeln('*  5: Eliminar Institución    *');
+    textColor(Yellow);
+    writeln('*  6: Búsqueda Avanzada       *');
     textColor(White);
-    writeln('*  6: Salir                   *');
+    writeln('*  7: Salir                   *');
     
     
     textColor(Mono);
@@ -159,6 +161,8 @@ textbackground(Black);
 			2: begin // La idea acá es agregar la institución y mostrarla ya ordenada. Quizás
 				clrscr;
 				tecla := 'S';
+				ordenamiento_burbuja(archivo, ascendente);
+				clrscr;
 				while UpCase(tecla) <> 'N' do
 					begin
 						with institucion do
@@ -317,6 +321,8 @@ textbackground(Black);
 						end;
 
 				5: begin
+					ordenamiento_burbuja(archivo, ascendente);
+					clrscr;
 					tercera_eleccion := 'S';
 					while UpCase(tercera_eleccion) = 'S' do
 						begin
@@ -334,17 +340,68 @@ textbackground(Black);
 							abrir(archivo);
 							readln(tercera_eleccion);
 						end;
-					
 					end;
 				6: begin
+						ordenamiento_burbuja(archivo, ascendente);
+						clrscr;
 						writeln();
 						textcolor(White);
-						writeln('Saliendo del programa...');
+						tecla := 'S';
+
+					while UpCase(tecla) <> 'N' do
+						begin
+						textcolor(White);
+						write('Tipee el número de la institución a buscar: ');
+						textcolor(LightGreen);
+						readln(numero);
+						busqueda_binariaprnum(archivo, pos, numero);
+						if pos >= 0 then
+						  begin
+							writeln();
+							writeln('Institución encontrada en la posición: ', pos);
+							writeln();
+							textcolor(LightMagenta);
+							writeln('Detalles: ');
+							writeln();
+							mostrar_registro(archivo, pos);
+							writeln();
+							textcolor(White);
+							write('¿Desea buscar otra institución? S/N: ');
+							textcolor(LightGreen);
+							readln(tecla);
+							writeln();
+						  end
+						  else
+						  begin
+							textcolor(LightRed);
+							writeln('Institución no encontrada.');
+							writeln();
+							textcolor(White);
+							writeln('¿Desea buscar otra institución? S/N: ');
+							textcolor(LightGreen);
+							readln(tecla);
+						  end;
+						 end; 
+					//	 readkey;
+						 
+						
+					end;
+				7: begin
+						ordenamiento_burbuja(archivo, ascendente);
+						//clrscr;
+						textcolor(Yellow);
+						writeln();
+						writeln('Saliendo del programa, por favor espera...');
+						writeln();
+						delay(1000);
+						clrscr;
+						textcolor(LightGreen);
+						writeln('Cerrado con éxito.');
 					end;
 			else
 			writeln('Eleccción inválida.');
 		end; 
 		//cerrar(archivo);
-	until eleccion = 6;
+	until eleccion = 7;
 END.
 
